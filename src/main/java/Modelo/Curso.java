@@ -6,29 +6,19 @@ package Modelo;
 
 public class Curso {
 
-	private int ID;
-	private String NAME;
-	private int hours;
-	private int credits;
-	private String profesor;
+	public String NAME;
+	public int hours;
+	public int credits;
+	public String profesor;
 
 	public Curso() {
 	}
 
-	public Curso(int ID, String NAME, int hours, int credits, String profesor) {
-		this.ID = ID;
+	public Curso(String NAME, int hours, int credits, String profesor) {
 		this.NAME = NAME;
 		this.hours = hours;
 		this.credits = credits;
 		this.profesor = profesor;
-	}
-
-	public int getID() {
-		return ID;
-	}
-
-	public void setID(int ID) {
-		this.ID = ID;
 	}
 
 	public String getNAME() {

@@ -1,4 +1,7 @@
-sqlite, gestion de matricula
+gestion de matricula
+
+users: arraylist
+cursos: linkedlist
 
 ![login](img/login.png)
 

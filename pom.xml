@@ -11,12 +11,7 @@
 		<exec.mainClass>com.mycompany.slqserver.Main</exec.mainClass>
 	</properties>
 
-	<dependencies> 
-		<dependency>
-			<groupId>org.xerial</groupId>
-			<artifactId>sqlite-jdbc</artifactId>
-			<version>3.49.1.0</version>
-		</dependency>
+	<dependencies>
 	</dependencies>
 	<name>matricula</name>
 </project>

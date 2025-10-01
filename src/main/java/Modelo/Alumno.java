@@ -9,25 +9,16 @@ package Modelo;
  * @author frd
  */
 public class Alumno {
-	private int ID;
+
 	private String DNI;
 	private String PASSWD;
 
 	public Alumno() {
 	}
 
-	public Alumno(int ID, String DNI, String PASSWD) {
-		this.ID = ID;
+	public Alumno(String DNI, String PASSWD) {
 		this.DNI = DNI;
 		this.PASSWD = PASSWD;
-	}
-
-	public int getID() {
-		return ID;
-	}
-
-	public void setID(int ID) {
-		this.ID = ID;
 	}
 
 	public String getDNI() {
@@ -45,5 +36,5 @@ public class Alumno {
 	public void setPASSWD(String PASSWD) {
 		this.PASSWD = PASSWD;
 	}
-	
+
 }
