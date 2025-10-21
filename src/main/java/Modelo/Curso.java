@@ -6,7 +6,7 @@ package Modelo;
 
 public class Curso {
 
-	public String NAME;
+	public String name;
 	public int hours;
 	public int credits;
 	public String profesor;
@@ -14,19 +14,19 @@ public class Curso {
 	public Curso() {
 	}
 
-	public Curso(String NAME, int hours, int credits, String profesor) {
-		this.NAME = NAME;
+	public Curso(String name, int hours, int credits, String profesor) {
+		this.name = name;
 		this.hours = hours;
 		this.credits = credits;
 		this.profesor = profesor;
 	}
 
-	public String getNAME() {
-		return NAME;
+	public String getName() {
+		return name;
 	}
 
-	public void setNAME(String NAME) {
-		this.NAME = NAME;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public int getHours() {
@@ -55,7 +55,7 @@ public class Curso {
 
 	@Override
 	public String toString() {
-		return NAME + " (" + credits + " créditos, " + hours + "h) - " + profesor;
+		return name + " (" + credits + " credits, " + hours + "h) - " + profesor;
 	}
 
 }
