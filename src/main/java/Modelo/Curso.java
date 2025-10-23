@@ -16,7 +16,7 @@ public class Curso {
 		this.name = name;
 		this.hours = hours;
 		this.credits = credits;
-		this.profesor = profesor;
+		this.profesor = profesor; 
 		this.horario = horario;
 	}
 

@@ -37,7 +37,7 @@ public class Principal extends javax.swing.JFrame {
 		model.addColumn("Curso");
 		model.addColumn("Horas");
 		model.addColumn("Créditos");
-		model.addColumn("?");
+		model.addColumn("Action");
 
 		d1.add(new Curso("Math1", 2, 2));
 		d1.add(new Curso("Math2", 3, 3));
@@ -56,13 +56,16 @@ public class Principal extends javax.swing.JFrame {
 	}
 
 	public void copyFromTables() {
-		// Inicializar modelo de tbSelCourses con mismas columnas que tbCourses
 		DefaultTableModel modelSel = new DefaultTableModel();
 		tbSelCourses.setModel(modelSel);
-		for (int i = 0; i < tbCourses.getColumnCount(); i++) {
-			modelSel.addColumn(tbCourses.getColumnName(i));
-		}
-		//
+
+		modelSel.addColumn("Curso");
+		modelSel.addColumn("Horas");
+		modelSel.addColumn("Créditos");
+		modelSel.addColumn("Profesor");
+		modelSel.addColumn("Horario");
+		modelSel.addColumn("Action");
+
 		TableActionEvent event = new TableActionEvent() {
 			@Override
 			public void onDelete(int row) {
@@ -77,10 +80,8 @@ public class Principal extends javax.swing.JFrame {
 		TableActionEvent2 event2 = new TableActionEvent2() {
 			@Override
 			public void openUI(int row) {
-				if (tbSelCourses.isEditing()) {
-					tbSelCourses.getCellEditor().stopCellEditing();
-				}
-				NewJFrame n = new NewJFrame();
+				Curso cursoSeleccionado = d1.toArray()[row];
+				NewJFrame n = new NewJFrame(cursoSeleccionado, tbSelCourses);
 				n.setVisible(true);
 				n.setDefaultCloseOperation(NewJFrame.DISPOSE_ON_CLOSE);
 			}
@@ -89,8 +90,8 @@ public class Principal extends javax.swing.JFrame {
 		tbCourses.getColumnModel().getColumn(3).setCellRenderer(new buttonToTable2());
 		tbCourses.getColumnModel().getColumn(3).setCellEditor(new TableActionCellEditor2(event2));
 
-		tbSelCourses.getColumnModel().getColumn(3).setCellRenderer(new buttonToTable());
-		tbSelCourses.getColumnModel().getColumn(3).setCellEditor(new TableActionCellEditor(event));
+		tbSelCourses.getColumnModel().getColumn(5).setCellRenderer(new buttonToTable());
+		tbSelCourses.getColumnModel().getColumn(5).setCellEditor(new TableActionCellEditor(event));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -111,6 +112,7 @@ public class Principal extends javax.swing.JFrame {
                 jLabel1 = new javax.swing.JLabel();
                 jLabel2 = new javax.swing.JLabel();
                 jButton1 = new javax.swing.JButton();
+                txtUser = new javax.swing.JLabel();
                 jMenuBar1 = new javax.swing.JMenuBar();
                 menuAsistencia = new javax.swing.JMenu();
 
@@ -129,11 +131,6 @@ public class Principal extends javax.swing.JFrame {
                         }
                 ));
                 tbCourses.setRowHeight(30);
-                tbCourses.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                tbCoursesMouseClicked(evt);
-                        }
-                });
                 jScrollPane1.setViewportView(tbCourses);
 
                 tbSelCourses.setModel(new javax.swing.table.DefaultTableModel(
@@ -163,6 +160,7 @@ public class Principal extends javax.swing.JFrame {
                 jDesktopPane1.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
                 jDesktopPane1.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
                 jDesktopPane1.setLayer(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+                jDesktopPane1.setLayer(txtUser, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
                 javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
                 jDesktopPane1.setLayout(jDesktopPane1Layout);
@@ -171,26 +169,32 @@ public class Principal extends javax.swing.JFrame {
                         .addGroup(jDesktopPane1Layout.createSequentialGroup()
                                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                                .addGap(34, 34, 34)
-                                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                                .addGap(15, 15, 15)
-                                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 766, Short.MAX_VALUE)
-                                                        .addComponent(jScrollPane2)))
-                                        .addGroup(jDesktopPane1Layout.createSequentialGroup()
                                                 .addGap(51, 51, 51)
-                                                .addComponent(jButton1)))
+                                                .addComponent(jButton1))
+                                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jDesktopPane1Layout.createSequentialGroup()
+                                                        .addGap(34, 34, 34)
+                                                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jDesktopPane1Layout.createSequentialGroup()
+                                                        .addGap(15, 15, 15)
+                                                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 766, Short.MAX_VALUE)
+                                                                .addComponent(jScrollPane2)))))
                                 .addContainerGap(17, Short.MAX_VALUE))
                 );
                 jDesktopPane1Layout.setVerticalGroup(
                         jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jDesktopPane1Layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel2)
@@ -198,15 +202,10 @@ public class Principal extends javax.swing.JFrame {
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButton1)
-                                .addContainerGap(10, Short.MAX_VALUE))
+                                .addGap(10, 10, 10))
                 );
 
                 menuAsistencia.setText("Cursos");
-                menuAsistencia.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                menuAsistenciaMouseClicked(evt);
-                        }
-                });
                 jMenuBar1.add(menuAsistencia);
 
                 setJMenuBar(jMenuBar1);
@@ -237,12 +236,15 @@ public class Principal extends javax.swing.JFrame {
 		tb.append("th { background-color: #f2f2f2; }");
 		tb.append("</style>");
 		tb.append("</head><body>");
+
+		tb.append("<img src='file:./img/utp.jpg' alt='Logo' style='width:100px;height:auto;'/>");
 		tb.append("<h2 style='text-align:center;'>Cursos Matriculados</h2>");
+		tb.append("<h3 style='text-align:left;'>User: ").append(frmLogin.txtUsuario.getText()).append("</23>");
 		tb.append("<table>");
 		tb.append("<tr>");
 
 		// Encabezados
-		for (int col = 0; col < model.getColumnCount(); col++) {
+		for (int col = 0; col < model.getColumnCount() - 1; col++) {
 			tb.append("<th>").append(model.getColumnName(col)).append("</th>");
 		}
 		tb.append("</tr>");
@@ -250,7 +252,7 @@ public class Principal extends javax.swing.JFrame {
 		// Filas
 		for (int fila = 0; fila < model.getRowCount(); fila++) {
 			tb.append("<tr>");
-			for (int col = 0; col < model.getColumnCount(); col++) {
+			for (int col = 0; col < model.getColumnCount() - 1; col++) {
 				Object valor = model.getValueAt(fila, col);
 				tb.append("<td>").append(valor != null ? valor.toString() : "").append("</td>");
 			}
@@ -265,35 +267,6 @@ public class Principal extends javax.swing.JFrame {
 			System.getLogger(Principal.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
 		}
         }//GEN-LAST:event_jButton1ActionPerformed
-
-	private void menuAsistenciaMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_menuAsistenciaMouseClicked
-	}// GEN-LAST:event_menuAsistenciaMouseClicked
-
-	private void tbCoursesMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_tbCoursesMouseClicked
-		// tbCourses.getValueAt(), tbCourses.getColumnCount()
-		int selectedRow = tbCourses.getSelectedRow();
-
-		if (selectedRow != -1) {
-			DefaultTableModel modelCourses = (DefaultTableModel) tbCourses.getModel();
-			DefaultTableModel modelSel = (DefaultTableModel) tbSelCourses.getModel();
-			Object[] rowData = new Object[modelCourses.getColumnCount()];
-
-			for (int i = 0; i < modelCourses.getColumnCount(); i++) {
-				rowData[i] = modelCourses.getValueAt(selectedRow, i);
-			}
-			// no duplicado
-			boolean exists = false;
-			for (int i = 0; i < modelSel.getRowCount(); i++) {
-				if (modelSel.getValueAt(i, 0).equals(rowData[0])) {
-					exists = true;
-					break;
-				}
-			}
-			if (!exists) {
-				modelSel.addRow(rowData);
-			}
-		}
-	}// GEN-LAST:event_tbCoursesMouseClicked
 
 	public static void main(String args[]) {
 		try {
@@ -329,5 +302,6 @@ public class Principal extends javax.swing.JFrame {
         private javax.swing.JMenu menuAsistencia;
         public static javax.swing.JTable tbCourses;
         public static javax.swing.JTable tbSelCourses;
+        private javax.swing.JLabel txtUser;
         // End of variables declaration//GEN-END:variables
 }
