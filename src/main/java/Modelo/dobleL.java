@@ -70,12 +70,12 @@ public class dobleL {
 		return arr;
 	}
 
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		dobleL d1= new dobleL();
-		d1.add(new Curso("a1", 1,2,"1a"));
+		d1.add(new Curso("a1", 1,2));
 		
 		Curso str[]= d1.toArray();
 		
 		System.out.println(str[0].getName());
-	}*/
+	}
 }

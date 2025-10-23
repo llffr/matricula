@@ -10,15 +10,20 @@ public class Curso {
 	public int hours;
 	public int credits;
 	public String profesor;
+	public String horario;
 
-	public Curso() {
-	}
-
-	public Curso(String name, int hours, int credits, String profesor) {
+	public Curso(String name, int hours, int credits, String profesor, String horario) {
 		this.name = name;
 		this.hours = hours;
 		this.credits = credits;
 		this.profesor = profesor;
+		this.horario = horario;
+	}
+
+	public Curso(String name, int hours, int credits) {
+		this.name = name;
+		this.hours = hours;
+		this.credits = credits;
 	}
 
 	public String getName() {
@@ -50,12 +55,20 @@ public class Curso {
 	}
 
 	public void setProfesor(String profesor) {
-		this.profesor = profesor;
+		this.profesor= profesor;
+	}
+
+	public String getHorario() {
+		return horario;
+	}
+
+	public void setHorario(String horario) {
+		this.horario = horario;
 	}
 
 	@Override
 	public String toString() {
-		return name + " (" + credits + " credits, " + hours + "h) - " + profesor;
+		return name + " (" + credits + " credits, " + hours + "h)" + profesor + " " + horario;
 	}
 
 }

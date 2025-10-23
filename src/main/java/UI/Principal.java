@@ -7,9 +7,15 @@ package UI;
 import Modelo.Curso;
 import Modelo.dobleL;
 import UI.btnTable.TableActionCellEditor;
+import UI.btnTable.TableActionCellEditor2;
 import UI.btnTable.buttonToTable;
 import javax.swing.table.DefaultTableModel;
 import UI.btnTable.TableActionEvent;
+import UI.btnTable.TableActionEvent2;
+import UI.btnTable.buttonToTable2;
+// hmtl to pdf
+import java.io.*;
+import com.itextpdf.html2pdf.HtmlConverter;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -29,22 +35,21 @@ public class Principal extends javax.swing.JFrame {
 		DefaultTableModel model = new DefaultTableModel();
 
 		model.addColumn("Curso");
+		model.addColumn("Horas");
 		model.addColumn("Créditos");
-		model.addColumn("H");
 		model.addColumn("?");
 
-		d1.add(new Curso("Math1", 2, 2, "a1"));
-		d1.add(new Curso("Math2", 3, 3, "a2"));
-		d1.add(new Curso("Math3", 3, 3, "a3"));
-		d1.add(new Curso("Math4", 5, 3, "a4"));
+		d1.add(new Curso("Math1", 2, 2));
+		d1.add(new Curso("Math2", 3, 3));
+		d1.add(new Curso("Math3", 3, 3));
+		d1.add(new Curso("Math4", 5, 3));
 		Curso cursosArr[] = d1.toArray();
+
 		for (Curso curso : cursosArr) {
 			Object[] row = new Object[]{
 				curso.getName(),
-				curso.getCredits(),
 				curso.getHours(),
-				curso.getProfesor()
-			};
+				curso.getCredits(),};
 			model.addRow(row);
 		}
 		tbCourses.setModel(model);
@@ -69,9 +74,23 @@ public class Principal extends javax.swing.JFrame {
 			}
 		};
 
+		TableActionEvent2 event2 = new TableActionEvent2() {
+			@Override
+			public void openUI(int row) {
+				if (tbSelCourses.isEditing()) {
+					tbSelCourses.getCellEditor().stopCellEditing();
+				}
+				NewJFrame n = new NewJFrame();
+				n.setVisible(true);
+				n.setDefaultCloseOperation(NewJFrame.DISPOSE_ON_CLOSE);
+			}
+		};
+
+		tbCourses.getColumnModel().getColumn(3).setCellRenderer(new buttonToTable2());
+		tbCourses.getColumnModel().getColumn(3).setCellEditor(new TableActionCellEditor2(event2));
+
 		tbSelCourses.getColumnModel().getColumn(3).setCellRenderer(new buttonToTable());
 		tbSelCourses.getColumnModel().getColumn(3).setCellEditor(new TableActionCellEditor(event));
-
 	}
 
 	@SuppressWarnings("unchecked")
@@ -91,6 +110,7 @@ public class Principal extends javax.swing.JFrame {
                 tbSelCourses = new javax.swing.JTable();
                 jLabel1 = new javax.swing.JLabel();
                 jLabel2 = new javax.swing.JLabel();
+                jButton1 = new javax.swing.JButton();
                 jMenuBar1 = new javax.swing.JMenuBar();
                 menuAsistencia = new javax.swing.JMenu();
 
@@ -108,6 +128,7 @@ public class Principal extends javax.swing.JFrame {
 
                         }
                 ));
+                tbCourses.setRowHeight(30);
                 tbCourses.addMouseListener(new java.awt.event.MouseAdapter() {
                         public void mouseClicked(java.awt.event.MouseEvent evt) {
                                 tbCoursesMouseClicked(evt);
@@ -130,36 +151,54 @@ public class Principal extends javax.swing.JFrame {
 
                 jLabel2.setText("Cursos matriculados");
 
+                jButton1.setText("reporte");
+                jButton1.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jButton1ActionPerformed(evt);
+                        }
+                });
+
                 jDesktopPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
                 jDesktopPane1.setLayer(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
                 jDesktopPane1.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
                 jDesktopPane1.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+                jDesktopPane1.setLayer(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
                 javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
                 jDesktopPane1.setLayout(jDesktopPane1Layout);
                 jDesktopPane1Layout.setHorizontalGroup(
                         jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                .addGap(34, 34, 34)
-                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 732, Short.MAX_VALUE)
-                                        .addComponent(jScrollPane2)
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(32, Short.MAX_VALUE))
+                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                                .addGap(34, 34, 34)
+                                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                                .addGap(15, 15, 15)
+                                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 766, Short.MAX_VALUE)
+                                                        .addComponent(jScrollPane2)))
+                                        .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                                .addGap(51, 51, 51)
+                                                .addComponent(jButton1)))
+                                .addContainerGap(17, Short.MAX_VALUE))
                 );
                 jDesktopPane1Layout.setVerticalGroup(
                         jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jDesktopPane1Layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(jLabel1)
-                                .addGap(9, 9, 9)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(28, 28, 28)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(57, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton1)
+                                .addContainerGap(10, Short.MAX_VALUE))
                 );
 
                 menuAsistencia.setText("Cursos");
@@ -186,6 +225,47 @@ public class Principal extends javax.swing.JFrame {
                 pack();
         }// </editor-fold>//GEN-END:initComponents
 
+	// create pdf
+        private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+		DefaultTableModel model = (DefaultTableModel) tbSelCourses.getModel();
+
+		StringBuilder tb = new StringBuilder();
+		tb.append("<html><head>");
+		tb.append("<style>");
+		tb.append("table { width:100%; border-collapse: collapse; }");
+		tb.append("th, td { border: 1px solid #000; padding: 8px; text-align: center; }");
+		tb.append("th { background-color: #f2f2f2; }");
+		tb.append("</style>");
+		tb.append("</head><body>");
+		tb.append("<h2 style='text-align:center;'>Cursos Matriculados</h2>");
+		tb.append("<table>");
+		tb.append("<tr>");
+
+		// Encabezados
+		for (int col = 0; col < model.getColumnCount(); col++) {
+			tb.append("<th>").append(model.getColumnName(col)).append("</th>");
+		}
+		tb.append("</tr>");
+
+		// Filas
+		for (int fila = 0; fila < model.getRowCount(); fila++) {
+			tb.append("<tr>");
+			for (int col = 0; col < model.getColumnCount(); col++) {
+				Object valor = model.getValueAt(fila, col);
+				tb.append("<td>").append(valor != null ? valor.toString() : "").append("</td>");
+			}
+			tb.append("</tr>");
+		}
+		tb.append("</table>");
+		tb.append("</body></html>");
+
+		try {
+			HtmlConverter.convertToPdf(tb.toString(), new FileOutputStream("o.pdf"));
+		} catch (FileNotFoundException ex) {
+			System.getLogger(Principal.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+		}
+        }//GEN-LAST:event_jButton1ActionPerformed
+
 	private void menuAsistenciaMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_menuAsistenciaMouseClicked
 	}// GEN-LAST:event_menuAsistenciaMouseClicked
 
@@ -197,6 +277,7 @@ public class Principal extends javax.swing.JFrame {
 			DefaultTableModel modelCourses = (DefaultTableModel) tbCourses.getModel();
 			DefaultTableModel modelSel = (DefaultTableModel) tbSelCourses.getModel();
 			Object[] rowData = new Object[modelCourses.getColumnCount()];
+
 			for (int i = 0; i < modelCourses.getColumnCount(); i++) {
 				rowData[i] = modelCourses.getValueAt(selectedRow, i);
 			}
@@ -236,6 +317,7 @@ public class Principal extends javax.swing.JFrame {
 	}
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
+        private javax.swing.JButton jButton1;
         private javax.swing.JDesktopPane jDesktopPane1;
         private javax.swing.JLabel jLabel1;
         private javax.swing.JLabel jLabel2;

@@ -11,20 +11,20 @@ import java.awt.event.ActionListener;
  *
  * @author fernd
  */
-public class PanelAction extends javax.swing.JPanel {
+public class PanelAction2 extends javax.swing.JPanel {
 
 	/**
 	 * Creates new form buttonsTb
 	 */
-	public PanelAction() {
+	public PanelAction2() {
 		initComponents();
 	}
 //
-	public void initEvent(TableActionEvent event, int row) {
-		delBtn.addActionListener(new ActionListener() {
+	public void initEvent(TableActionEvent2 event, int row) {
+		openBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-				event.onDelete(row);
+				event.openUI(row);
 			}
 		});
 	}
@@ -39,29 +39,38 @@ public class PanelAction extends javax.swing.JPanel {
         // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
         private void initComponents() {
 
-                delBtn = new javax.swing.JButton();
+                openBtn = new javax.swing.JButton();
 
-                delBtn.setText("Del");
+                openBtn.setText("Open");
+                openBtn.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                openBtnActionPerformed(evt);
+                        }
+                });
 
                 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
                 this.setLayout(layout);
                 layout.setHorizontalGroup(
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(delBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(openBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 );
                 layout.setVerticalGroup(
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(delBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(openBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 );
         }// </editor-fold>//GEN-END:initComponents
 
+        private void openBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openBtnActionPerformed
+                // TODO add your handling code here:
+        }//GEN-LAST:event_openBtnActionPerformed
+
         // Variables declaration - do not modify//GEN-BEGIN:variables
-        private javax.swing.JButton delBtn;
+        private javax.swing.JButton openBtn;
         // End of variables declaration//GEN-END:variables
 }
