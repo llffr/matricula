@@ -10,23 +10,23 @@ package Modelo;
  */
 public class Alumno {
 
-	private String DNI;
+	private String CODIGO;
 	private String PASSWD;
 
 	public Alumno() {
 	}
 
-	public Alumno(String DNI, String PASSWD) {
-		this.DNI = DNI;
+	public Alumno(String CODIGO, String PASSWD) {
+		this.CODIGO = CODIGO;
 		this.PASSWD = PASSWD;
 	}
 
-	public String getDNI() {
-		return DNI;
+	public String getCODIGO() {
+		return CODIGO;
 	}
 
-	public void setDNI(String DNI) {
-		this.DNI = DNI;
+	public void setCODIGO(String CODIGO) {
+		this.CODIGO = CODIGO;
 	}
 
 	public String getPASSWD() {
@@ -35,6 +35,10 @@ public class Alumno {
 
 	public void setPASSWD(String PASSWD) {
 		this.PASSWD = PASSWD;
+	}
+	@Override
+	public String toString() {
+		return CODIGO + " " + PASSWD; 
 	}
 
 }

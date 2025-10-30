@@ -10,26 +10,25 @@ package Modelo;
  */
 public class dobleL {
 
-	class dobleNode {
-
-		Curso data;
-		dobleNode next;
-		dobleNode prev;
-
-		dobleNode(Curso data) {
-			this.data = data;
-			this.next = null;
-			this.prev = null;
-		}
-
-	}
-
-	dobleNode init;
-	dobleNode end;
+	private dobleNode init;
+	private dobleNode end;
 	int size = 0;
 
 	public void add(Curso data) {
 		dobleNode aux = new dobleNode(data);
+		if (init == null) {
+			init = end = aux;
+			size++;
+			return;
+		}
+		end.next = aux;
+		aux.prev = end;
+		end = aux;
+		size++;
+	}
+
+	public void add(Alumno dataAl) {
+		dobleNode aux = new dobleNode(dataAl);
 		if (init == null) {
 			init = end = aux;
 			size++;
@@ -50,6 +49,15 @@ public class dobleL {
 		System.out.println("null");
 	}
 
+	public void printInitAl() {
+		dobleNode current = init;
+		while (current != null) {
+			System.out.print(current.dataAl + " <-> ");
+			current = current.next;
+		}
+		System.out.println("null");
+	}
+
 	public void printEnd() {
 		dobleNode current = end;
 		while (current != null) {
@@ -57,6 +65,18 @@ public class dobleL {
 			current = current.prev;
 		}
 		System.out.println("null");
+	}
+
+	public boolean containsValue(String dni, String pwd) {
+		dobleNode current = init;
+
+		while (current != null) {
+			if (current.dataAl.getCODIGO().equals(dni) && current.dataAl.getPASSWD().equals(pwd)) {
+				return true;
+			}
+			current = current.next;
+		}
+		return false;
 	}
 
 	public Curso[] toArray() {
@@ -70,12 +90,16 @@ public class dobleL {
 		return arr;
 	}
 
-	public static void main(String[] args) {
-		dobleL d1= new dobleL();
-		d1.add(new Curso("a1", 1,2));
-		
-		Curso str[]= d1.toArray();
-		
-		System.out.println(str[0].getName());
-	}
+	/*public static void main(String[] args) {
+		dobleL d1 = new dobleL();
+		d1.add(new Alumno("imi", "imdie"));
+		d1.add(new Alumno("imi", "imdie"));
+		d1.add(new Alumno("imi", "imdie"));
+		d1.add(new Alumno("imi", "imdie"));
+		d1.add(new Alumno("imi", "imdie"));
+		d1.add(new Alumno("imi", "imdie"));
+		d1.add(new Alumno("imi", "imdie"));
+		d1.printInitAl();
+		System.out.println("im");
+	}*/
 }

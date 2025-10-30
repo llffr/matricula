@@ -5,11 +5,11 @@
 package UI;
 
 import Modelo.Alumno;
-import Modelo.simpleLkl;
+import Modelo.dobleL;
 
 public class frmLogin extends javax.swing.JFrame {
 
-	simpleLkl s1 = new simpleLkl();
+	dobleL s1 = new dobleL();
 
 	public frmLogin() {
 		addX();
