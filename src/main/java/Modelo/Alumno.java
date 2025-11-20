@@ -10,11 +10,7 @@ package Modelo;
  */
 public class Alumno {
 
-	private String CODIGO;
-	private String PASSWD;
-
-	public Alumno() {
-	}
+	private String CODIGO, PASSWD;
 
 	public Alumno(String CODIGO, String PASSWD) {
 		this.CODIGO = CODIGO;

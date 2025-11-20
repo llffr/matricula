@@ -6,11 +6,8 @@ package Modelo;
 
 public class Curso {
 
-	private String name;
-	private int hours;
-	private int credits;
-	private String profesor;
-	private String horario;
+	private String name, profesor, horario;
+	private int hours, credits;
 
 	public Curso(String name, int hours, int credits, String profesor, String horario) {
 		this.name = name;

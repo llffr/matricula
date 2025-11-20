@@ -5,16 +5,17 @@
 package UI;
 
 import Modelo.Alumno;
-import Modelo.dobleL;
+import Modelo.Docente;
+import Structure.genericListaDoble;
+import Structure.genericNode;
+import Structure.globalVariables;
 
 public class frmLogin extends javax.swing.JFrame {
 
-	dobleL s1 = new dobleL();
-
 	public frmLogin() {
-		addX();
+		globalVariables.initVariables();
 		initComponents();
-		setLocationRelativeTo(null); // isn't specified window's center jframe
+		setLocationRelativeTo(null); // center window 
 	}
 
 	public void noUI(boolean x) {
@@ -23,14 +24,6 @@ public class frmLogin extends javax.swing.JFrame {
 		txtUsuario.setVisible(x);
 		txtPasswd.setVisible(x);
 		btnLogin.setVisible(x);
-	}
-
-	public void addX() {
-		for (int x = 1; x < 100; x++) {
-			String al = "U" + Integer.toString(x);
-			String al_pwd = Integer.toString(x);
-			s1.add(new Alumno(al, al_pwd));
-		}
 	}
 
 	/**
@@ -127,15 +120,31 @@ public class frmLogin extends javax.swing.JFrame {
 	//login
         private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
 		String user = txtUsuario.getText();
-		String pwd = txtPasswd.getText();
+		String pwd = new String(txtPasswd.getPassword());
 
-		if (s1.containsValue(user, pwd)) {
-			Principal p = new Principal();
-			p.setVisible(true);
-			this.dispose();
-		} else {
-			validUser.setText("Invalid user or password");
-			txtPasswd.setText("");
+		// Obtener las listas desde el ContextoDatos
+		genericListaDoble<Alumno> alumnos = globalVariables.getListaAlumnos();
+
+		boolean usuarioEncontrado = false;
+
+		if (!usuarioEncontrado) {
+			genericNode<Alumno> actualA = alumnos.getCabeza();
+			while (actualA != null) {
+				Alumno a = actualA.getDato();
+				if (a.getCODIGO().equals(user) && a.getPASSWD().equals(pwd)) {
+					Principal n = new Principal();
+					n.setVisible(true);
+					this.dispose();
+					break;
+				} else if (user.equals("root")) {
+					frmAdd n = new frmAdd();
+					n.setVisible(true);
+					this.dispose();
+					break;
+
+				}
+				actualA = actualA.getSiguiente();
+			}
 		}
         }//GEN-LAST:event_btnLoginActionPerformed
 

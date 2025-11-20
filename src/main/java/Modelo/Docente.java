@@ -4,22 +4,32 @@
  */
 package Modelo;
 
-/**
- *
- * @author fernd
- */
 public class Docente {
 
-	private String idDocente, nombre, especialidad, correo;
+	private String nombre, pwd;
 
-	public Docente(String idDocente, String nombre, String especialidad, String correo) {
-		this.idDocente = idDocente;
+	public Docente(String nombre,  String pwd) {
 		this.nombre = nombre;
-		this.especialidad = especialidad;
-		this.correo = correo;
+		this.pwd = pwd;
 	}
 
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getPwd() {
+		return pwd;
+	}
+
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+	
 	public String toString() {
-		return idDocente + " - " + nombre;
+		return nombre + " " + pwd;
 	}
 }

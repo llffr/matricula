@@ -1,16 +1,30 @@
 gestion de matricula
 
-- Modelo:
-    - Alumno (dni, password)
-    - Curso (name, hours, credits, profesor)
-    - dobleL (linkedlist doble): metodos add, printInit, printEnd, toArray
-    - simpleLkl (linkedlist simple): metodos add, print, rm, containsValue
-- UI:
-    - frmLogin: crea simpleLkl, añade datos(addX), verifica si usuario y password estan en la lista
-    - Principal: crea dobleL, añade datos, agrega datos en tabla (toArray() de lista a array), selecciona cursos para matricula
-        - btnTabl: añade un boton dentro de la tabla (yt)
+* Modelo:
+    - Curso
+        - String: name, profesor, horario
+        - int: hours, credits
+        - constructor, getters, setters
+    - Alumno
+        - String: CODIGO, PASSWD
+        - constructor, getters, setters
+    - Docente
+        - String: nombre, pwd
+        - constructor, getters, setters
 
-
-![login](img/login.png)
-
-![login](img/main.png)
+* Structure
+    ### generics: para usar diferentes tipos
+    - genericNode
+        - private T dato;
+        - private genericNode<T>: previo, siguiente;
+        - constructor, getters, setters
+    - genericListaDoble
+        - genericNode<T>: cabeza, cola
+        - metodos: insertarAlInicio, buscarStudent, eliminar*, toArray, obtenerDatosComoString
+        - globalVariables: inicia variables estaticas (para no instanciarlas nuevaamente)
+        
+* UI:
+    - frmLogin: se globalVariables para añadir algunos datos a las listas
+        - frmHorario: seleccionar horario | confirma matricula
+    - Principal: seleccionar cursos a matricular
+    - frmAdd: añadir nuevos Cursos, Docente, Alumno a las listas
