@@ -9,10 +9,6 @@ import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-/**
- *
- * @author fernd
- */
 public class buttonToTable2 extends DefaultTableCellRenderer {
 
 	@Override

@@ -1,5 +1,9 @@
 gestion de matricula
 
+corregir / agregar:
+- combobox para seleccionar dias de curso: frmAdd
+- limite de alumnos para matricularse en un curso
+
 * Modelo:
     - Curso
         - String: name, profesor, horario
@@ -28,3 +32,8 @@ gestion de matricula
         - frmHorario: seleccionar horario | confirma matricula
     - Principal: seleccionar cursos a matricular
     - frmAdd: añadir nuevos Cursos, Docente, Alumno a las listas
+
+   ![login](./img/login.png)
+   ![menu](./img/menu.png)
+   ![Confirmar horario](./img/horario.png)
+   ![Añadir](./img/add.png)

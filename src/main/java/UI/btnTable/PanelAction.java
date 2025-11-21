@@ -7,10 +7,6 @@ package UI.btnTable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- *
- * @author fernd
- */
 public class PanelAction extends javax.swing.JPanel {
 
 	/**

@@ -50,28 +50,25 @@ public class Principal extends javax.swing.JFrame {
 
 	public void addCourses() {
 		DefaultTableModel model = new DefaultTableModel() {
-			// Se asume que la columna 5 es la que tiene el botón (Action)
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return column == 5;
 			}
 		};
 
-		// 6 Columnas VISIBLES + 1 Columna Oculta (el índice) = 7 valores
 		model.addColumn("Curso");
-		model.addColumn("Profesor"); // AÑADIDO
-		model.addColumn("Horario");  // AÑADIDO
+		model.addColumn("Profesor");
+		model.addColumn("Horario");
 		model.addColumn("Horas");
 		model.addColumn("Créditos");
-		model.addColumn("Action");   // Columna 5 (Botón)
+		model.addColumn("Action");
 
-		// IMPORTANTE: Limpiar el modelo y la tabla antes de recargar
 		tbCourses.setModel(model);
 
 		genericListaDoble<Curso> listaCursos = globalVariables.getListaCursos();
 		genericNode<Curso> actual = listaCursos.getCabeza();
 
-		int index = 0; // índice de la lista doble (es único para cada variante de curso)
+		int index = 0;
 		while (actual != null) {
 			Curso curso = actual.getDato();
 			Object[] rowData = new Object[]{
@@ -80,7 +77,7 @@ public class Principal extends javax.swing.JFrame {
 				curso.getHorario(),
 				curso.getHours(),
 				curso.getCredits(),
-				"Seleccionar" // El texto que ve el usuario en la columna 5
+				"Seleccionar"
 			};
 			model.addRow(rowData);
 			actual = actual.getSiguiente();
@@ -90,15 +87,14 @@ public class Principal extends javax.swing.JFrame {
 		TableActionEvent2 event2 = new TableActionEvent2() {
 			@Override
 			public void openUI(int row) {
-// 1. Obtener los datos exactos de la fila seleccionada
+				// obtener los datos de fila seleccionada
 				String nombre = (String) tbCourses.getValueAt(row, 0);
 				String profesor = (String) tbCourses.getValueAt(row, 1);
 				String horario = (String) tbCourses.getValueAt(row, 2);
 				int horas = (int) tbCourses.getValueAt(row, 3);
 				int creditos = (int) tbCourses.getValueAt(row, 4);
 
-				// 2. Crear un objeto Curso (o buscar el objeto exacto en la lista global)
-				// Para simplificar, buscamos el objeto EXACTO usando todos sus atributos
+				// buscar el objeto usando sus atributos
 				Curso cursoSeleccionado = buscarCursoExacto(nombre, profesor, horario, horas, creditos);
 
 				if (cursoSeleccionado != null) {
@@ -106,7 +102,7 @@ public class Principal extends javax.swing.JFrame {
 					n.setVisible(true);
 					n.setDefaultCloseOperation(frmHorario.DISPOSE_ON_CLOSE);
 				} else {
-					JOptionPane.showMessageDialog(null, "Error: Curso no encontrado en la lista global.");
+					JOptionPane.showMessageDialog(null, "Error: Curso no encontrado en la lista");
 				}
 			}
 		};
@@ -141,15 +137,14 @@ public class Principal extends javax.swing.JFrame {
 		TableActionEvent2 event2 = new TableActionEvent2() {
 			@Override
 			public void openUI(int row) {
-// 1. Obtener los datos exactos de la fila seleccionada
+				// obtener los datos de la fila seleccionada
 				String nombre = (String) tbCourses.getValueAt(row, 0);
 				String profesor = (String) tbCourses.getValueAt(row, 1);
 				String horario = (String) tbCourses.getValueAt(row, 2);
 				int horas = (int) tbCourses.getValueAt(row, 3);
 				int creditos = (int) tbCourses.getValueAt(row, 4);
 
-				// 2. Crear un objeto Curso (o buscar el objeto exacto en la lista global)
-				// Para simplificar, buscamos el objeto EXACTO usando todos sus atributos
+				// buscar el objeto exacto usando sus atributos
 				Curso cursoSeleccionado = buscarCursoExacto(nombre, profesor, horario, horas, creditos);
 
 				if (cursoSeleccionado != null) {
@@ -356,7 +351,9 @@ public class Principal extends javax.swing.JFrame {
 		       tb.append("</body></html>");
 
 		       try {
+			       //genera archivo pdf
 			       HtmlConverter.convertToPdf(tb.toString(), new FileOutputStream("o.pdf"));
+			       JOptionPane.showMessageDialog(null, "Reporte Generado");
 		       } catch (FileNotFoundException ex) {
 			       System.getLogger(Principal.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
 		       }

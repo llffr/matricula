@@ -31,21 +31,21 @@ public class globalVariables {
 
 	public static void initVariables() {
 		if (datosInicializados) {
-			System.out.println("ADVERTENCIA: Los datos simulados ya fueron cargados. Saltando inicialización.");
+			System.out.println("datos ya creados");
 			return;
 		}
-		// Docentes de prueba: (nombre, codigo, pwd)
 		listaDocentes.agregarAlFinal(new Docente("Maria Lopez","123"));
 		listaDocentes.agregarAlFinal(new Docente("Juan Perez", "456"));
 
-		// Alumnos de prueba: (CODIGO, PASSWD)
-		listaAlumnos.agregarAlFinal(new Alumno("U1", "1"));
-		listaAlumnos.agregarAlFinal(new Alumno("U2", "2"));
+		for(int i=1; i<=1000; i++) {
+			String al= "U" + i;
+			String al_pwd= Integer.toString(i);
+			listaAlumnos.agregarAlFinal(new Alumno(al, al_pwd));
+		}
 
-		// Curso de prueba
-		listaCursos.agregarAlFinal(new Curso("Algoritmos", 4, 6, "Maria Lopez", "L-M 08:00-10:00 am"));
-		listaCursos.agregarAlFinal(new Curso("Math1", 4, 6, "Juan Perez", "L-M 08:00-10:00 am"));
-		listaCursos.agregarAlFinal(new Curso("Fisica1", 4, 6, "Juan Perez", "L-M 06:00-08:00 pm"));
+		listaCursos.agregarAlFinal(new Curso("Algoritmos", 4, 6, "Maria Lopez", "Lunes-Miercoles 8:30-10:00"));
+		listaCursos.agregarAlFinal(new Curso("Math1", 4, 6, "Juan Perez", "Lunes-Miercoles 10-13:00"));
+		listaCursos.agregarAlFinal(new Curso("Fisica1", 4, 6, "Juan Perez", "Martes-Jueves 18-20:30"));
 
 		// no duplicate
 		datosInicializados= true;

@@ -84,9 +84,9 @@ public class frmHorario extends javax.swing.JFrame {
 		jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 		jLabel3.setText("Horario:");
 
-		jLabel4.setText("Créditos:");
-
-		jLabel5.setText("Horas:");
+		// jLabel4.setText("Créditos:");
+		//
+		// jLabel5.setText("Horas:");
 
 		lblCursoNombre.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 		lblCursoNombre.setForeground(new java.awt.Color(0, 0, 204));
@@ -98,9 +98,9 @@ public class frmHorario extends javax.swing.JFrame {
 		lblHorario.setForeground(new java.awt.Color(204, 0, 0));
 		lblHorario.setText("L-M-V 18:00 - 20:00");
 
-		lblCreditos.setText("X");
-
-		lblHoras.setText("Y");
+		// lblCreditos.setText("X");
+		//
+		// lblHoras.setText("Y");
 
 		javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
 		jPanel1.setLayout(jPanel1Layout);

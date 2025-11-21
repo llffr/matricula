@@ -4,10 +4,6 @@
  */
 package Modelo;
 
-/**
- *
- * @author frd
- */
 public class Alumno {
 
 	private String CODIGO, PASSWD;

@@ -8,10 +8,6 @@ import UI.btnTable.PanelAction;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- *
- * @author fernd
- */
 public class TableActionCellEditor extends DefaultCellEditor {
 
 	private TableActionEvent event;

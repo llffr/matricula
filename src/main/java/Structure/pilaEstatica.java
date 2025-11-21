@@ -4,10 +4,6 @@
  */
 package Structure;
 
-/**
- *
- * @author fernd
- */
 public class pilaEstatica {
 	private int[] pila;
 	private int tope;

@@ -142,7 +142,7 @@ public class frmAdd extends JFrame {
 			}
 
 			Docente nuevoDocente = new Docente(nombre, pwd);
-			// USO DE LISTADOBLE
+			// uso de listadoble
 			docentes.agregarAlFinal(nuevoDocente);
 
 			JOptionPane.showMessageDialog(this, "Docente registrado: " + nuevoDocente.getNombre());
@@ -220,6 +220,16 @@ public class frmAdd extends JFrame {
 		panel.add(new JLabel("Horario:"));
 		panel.add(txtHorario);
 
+		String[] dias= {
+			"lunes-martes",
+			"martes-miercoles",
+			"miercoles-jueves",
+			"jueves-viernes",
+			"viernes-sabado",
+			"sabado-domingo",
+			"domingo-lunes"
+		};
+
 		JButton btnGuardar = new JButton("Guardar Curso");
 		btnGuardar.addActionListener(e -> {
 			try {
@@ -233,6 +243,26 @@ public class frmAdd extends JFrame {
 					JOptionPane.showMessageDialog(this, "Los campos de texto son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
+
+				// dias que se dicta para curso
+				boolean contienePar = false;
+				String horarioLower = horario.toLowerCase();
+
+				for (String par : dias) {
+					if (horarioLower.contains(par)) {
+						contienePar = true;
+						break;
+					}
+				}
+
+				if (!contienePar) {
+					JOptionPane.showMessageDialog(this,
+							"Debes escribir un horario válido (ej: lunes-martes 9-10:30).",
+							"Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				//******
 
 				Curso nuevoCurso = new Curso(name, hours, credits, profesor, horario);
 				// USO DE LISTADOBLE

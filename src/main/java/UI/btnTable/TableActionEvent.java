@@ -4,10 +4,6 @@
  */
 package UI.btnTable;
 
-/**
- *
- * @author fernd
- */
 public interface TableActionEvent {
 
 	public void onDelete(int row);

@@ -4,10 +4,6 @@
  */
 package UI.btnTable;
 
-/**
- *
- * @author fernd
- */
 public interface TableActionEvent2 {
 	public void openUI(int row);
 

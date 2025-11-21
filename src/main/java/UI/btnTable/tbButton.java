@@ -7,10 +7,6 @@ package UI.btnTable;
 import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
 
-/**
- *
- * @author fernd
- */
 public class tbButton extends JButton {
 
 	tbButton() {
