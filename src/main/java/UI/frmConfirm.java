@@ -9,12 +9,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public class frmHorario extends javax.swing.JFrame {
+public class frmConfirm extends javax.swing.JFrame {
 
 	private Curso cursoAConfirmar;
 	private JTable tablaDestino;
 
-	public frmHorario(Curso curso, JTable tabla) {
+	public frmConfirm(Curso curso, JTable tabla) {
 		this.cursoAConfirmar = curso;
 		this.tablaDestino = tabla;
 
@@ -24,13 +24,21 @@ public class frmHorario extends javax.swing.JFrame {
 	}
 
 	/**
-	 * Rellena las etiquetas con los detalles del curso.
+	 * Rellena las etiquetas con los detalles del curso, incluyendo vacantes.
 	 */
 	private void mostrarDetallesCurso() {
 		if (cursoAConfirmar != null) {
 			lblCursoNombre.setText(cursoAConfirmar.getName());
 			lblHorario.setText(cursoAConfirmar.getHorario());
 			lblProfesor.setText(cursoAConfirmar.getProfesor());
+
+			// Se rellenan los campos de Horas y Créditos (corrección de la omisión inicial)
+			lblCreditos.setText(String.valueOf(cursoAConfirmar.getCredits()));
+			lblHoras.setText(String.valueOf(cursoAConfirmar.getHours()));
+
+			// NUEVA LÍNEA: Mostrar Vacantes Disponibles/Máximas
+			String vacantesStr = cursoAConfirmar.getVacantesDisponibles() + " / " + cursoAConfirmar.getMaxVacantes();
+			lblVacantes.setText(vacantesStr); 
 		}
 	}
 
@@ -62,11 +70,17 @@ public class frmHorario extends javax.swing.JFrame {
 		jLabel3 = new javax.swing.JLabel();
 		jLabel4 = new javax.swing.JLabel();
 		jLabel5 = new javax.swing.JLabel();
+		// NUEVO: Etiqueta para Vacantes
+		jLabel6 = new javax.swing.JLabel(); 
+		
 		lblCursoNombre = new javax.swing.JLabel();
 		lblProfesor = new javax.swing.JLabel();
 		lblHorario = new javax.swing.JLabel();
 		lblCreditos = new javax.swing.JLabel();
 		lblHoras = new javax.swing.JLabel();
+		// NUEVO: Etiqueta de Valor de Vacantes
+		lblVacantes = new javax.swing.JLabel(); 
+
 		btnConfirmar = new javax.swing.JButton();
 		btnCancelar = new javax.swing.JButton();
 
@@ -84,9 +98,12 @@ public class frmHorario extends javax.swing.JFrame {
 		jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 		jLabel3.setText("Horario:");
 
-		// jLabel4.setText("Créditos:");
-		//
-		// jLabel5.setText("Horas:");
+		jLabel4.setText("Créditos:"); // Se reincorpora la etiqueta
+		
+		jLabel5.setText("Horas:"); // Se reincorpora la etiqueta
+
+		jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NUEVA ETIQUETA
+		jLabel6.setText("Vacantes:"); 
 
 		lblCursoNombre.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 		lblCursoNombre.setForeground(new java.awt.Color(0, 0, 204));
@@ -98,9 +115,13 @@ public class frmHorario extends javax.swing.JFrame {
 		lblHorario.setForeground(new java.awt.Color(204, 0, 0));
 		lblHorario.setText("L-M-V 18:00 - 20:00");
 
-		// lblCreditos.setText("X");
-		//
-		// lblHoras.setText("Y");
+		lblCreditos.setText("X");
+
+		lblHoras.setText("Y");
+		
+		lblVacantes.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NUEVO CAMPO
+		lblVacantes.setForeground(new java.awt.Color(0, 153, 0));
+		lblVacantes.setText("0/0");
 
 		javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
 		jPanel1.setLayout(jPanel1Layout);
@@ -113,9 +134,11 @@ public class frmHorario extends javax.swing.JFrame {
 						.addComponent(jLabel2)
 						.addComponent(jLabel3)
 						.addComponent(jLabel4)
-						.addComponent(jLabel5))
+						.addComponent(jLabel5)
+						.addComponent(jLabel6)) // NUEVA ETIQUETA
 					.addGap(30, 30, 30)
 					.addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+						.addComponent(lblVacantes) // NUEVO CAMPO
 						.addComponent(lblHoras)
 						.addComponent(lblCreditos)
 						.addComponent(lblHorario)
@@ -146,6 +169,10 @@ public class frmHorario extends javax.swing.JFrame {
 					.addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 						.addComponent(jLabel5)
 						.addComponent(lblHoras))
+					.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED) // Espacio para el nuevo campo
+					.addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+						.addComponent(jLabel6) // NUEVA ETIQUETA
+						.addComponent(lblVacantes)) // NUEVO CAMPO
 					.addContainerGap(15, Short.MAX_VALUE))
 		);
 
@@ -194,27 +221,27 @@ public class frmHorario extends javax.swing.JFrame {
 	}// </editor-fold>                        
 
 	private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {
-		agregarCursoAMatricula();
-		JOptionPane.showMessageDialog(this, "Curso '" + cursoAConfirmar.getName() + "' matriculado con éxito.", "Matrícula Exitosa", JOptionPane.INFORMATION_MESSAGE);
-		this.dispose(); // Cerrar la ventana de confirmación
+		
+		// Lógica de control de vacantes ya implementada
+		if (cursoAConfirmar.matricularAlumno()) {
+			// La matrícula fue exitosa y la vacante se redujo en el objeto Curso
+			agregarCursoAMatricula();
+			JOptionPane.showMessageDialog(this, "Curso '" + cursoAConfirmar.getName() + 
+					"' matriculado con éxito.\nVacantes restantes: " + cursoAConfirmar.getVacantesDisponibles(), 
+					"Matrícula Exitosa", JOptionPane.INFORMATION_MESSAGE);
+			this.dispose(); 
+		} else {
+			// No hay vacantes
+			JOptionPane.showMessageDialog(this, "ERROR: No quedan vacantes disponibles para el curso '" + 
+					cursoAConfirmar.getName() + "'.", 
+					"Matrícula Fallida", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {
 		this.dispose(); // Simplemente cerrar la ventana
 	}
 
-	// Las aplicaciones GUI que usan NetBeans Design no suelen tener main()
-	// en los formularios secundarios, pero lo incluyo por si necesitas probarlo
-	/*
-	   public static void main(String args[]) {
-	   java.awt.EventQueue.invokeLater(new Runnable() {
-	   public void run() {
-	// Ejemplo de uso (asumiendo que Curso existe)
-	// new frmHorario(new Curso("Test", 3, 5, "Dr. Ejemplo", "M-J 10:00"), new JTable()).setVisible(true);
-	   }
-	   });
-	   }
-	 */
 	// Variables declaration - do not modify                     
 	private javax.swing.JButton btnCancelar;
 	private javax.swing.JButton btnConfirmar;
@@ -223,11 +250,13 @@ public class frmHorario extends javax.swing.JFrame {
 	private javax.swing.JLabel jLabel3;
 	private javax.swing.JLabel jLabel4;
 	private javax.swing.JLabel jLabel5;
+	private javax.swing.JLabel jLabel6; // NUEVA ETIQUETA
 	private javax.swing.JPanel jPanel1;
 	private javax.swing.JLabel lblCreditos;
 	private javax.swing.JLabel lblCursoNombre;
 	private javax.swing.JLabel lblHorario;
 	private javax.swing.JLabel lblHoras;
 	private javax.swing.JLabel lblProfesor;
+	private javax.swing.JLabel lblVacantes; // NUEVA VARIABLE
 	// End of variables declaration                   
 }

@@ -49,10 +49,11 @@ public class Principal extends javax.swing.JFrame {
 	}
 
 	public void addCourses() {
+		// confirm btn
 		DefaultTableModel model = new DefaultTableModel() {
 			@Override
 			public boolean isCellEditable(int row, int column) {
-				return column == 5;
+				return column == 6;
 			}
 		};
 
@@ -61,6 +62,7 @@ public class Principal extends javax.swing.JFrame {
 		model.addColumn("Horario");
 		model.addColumn("Horas");
 		model.addColumn("Créditos");
+		model.addColumn("Vacantes");
 		model.addColumn("Action");
 
 		tbCourses.setModel(model);
@@ -71,13 +73,17 @@ public class Principal extends javax.swing.JFrame {
 		int index = 0;
 		while (actual != null) {
 			Curso curso = actual.getDato();
+
+			String vacantesStr = curso.getMaxVacantes() + "/" + curso.getVacantesDisponibles();
+
 			Object[] rowData = new Object[]{
 				curso.getName(),
-				curso.getProfesor(),
-				curso.getHorario(),
-				curso.getHours(),
-				curso.getCredits(),
-				"Seleccionar"
+					curso.getProfesor(),
+					curso.getHorario(),
+					curso.getHours(),
+					curso.getCredits(),
+					vacantesStr,
+					"Seleccionar"
 			};
 			model.addRow(rowData);
 			actual = actual.getSiguiente();
@@ -98,18 +104,17 @@ public class Principal extends javax.swing.JFrame {
 				Curso cursoSeleccionado = buscarCursoExacto(nombre, profesor, horario, horas, creditos);
 
 				if (cursoSeleccionado != null) {
-					frmHorario n = new frmHorario(cursoSeleccionado, tbSelCourses);
+					frmConfirm n = new frmConfirm(cursoSeleccionado, tbSelCourses);
 					n.setVisible(true);
-					n.setDefaultCloseOperation(frmHorario.DISPOSE_ON_CLOSE);
+					n.setDefaultCloseOperation(frmConfirm.DISPOSE_ON_CLOSE);
 				} else {
 					JOptionPane.showMessageDialog(null, "Error: Curso no encontrado en la lista");
 				}
 			}
 		};
 
-		tbCourses.getColumnModel().getColumn(5).setCellRenderer(new buttonToTable2());
-		tbCourses.getColumnModel().getColumn(5).setCellEditor(new TableActionCellEditor2(event2));
-
+		tbCourses.getColumnModel().getColumn(6).setCellRenderer(new buttonToTable2());
+		tbCourses.getColumnModel().getColumn(6).setCellEditor(new TableActionCellEditor2(event2));
 	}
 
 	public void copyFromTables() {
@@ -126,6 +131,24 @@ public class Principal extends javax.swing.JFrame {
 		TableActionEvent event = new TableActionEvent() {
 			@Override
 			public void onDelete(int row) {
+				// obtener datos de la fila eliminada para buscar el objeto exacto
+				String nombre = (String) tbSelCourses.getValueAt(row, 0);
+				String profesor = (String) tbSelCourses.getValueAt(row, 3);
+				String horario = (String) tbSelCourses.getValueAt(row, 4);
+				int horas = (int) tbSelCourses.getValueAt(row, 1);
+				int creditos = (int) tbSelCourses.getValueAt(row, 2);
+
+				// buscar el objeto curso exacto en la lista global
+				Curso cursoEliminado = buscarCursoExacto(nombre, profesor, horario, horas, creditos);
+
+				// liberar la vacante en el objeto de la lista global
+				if (cursoEliminado != null) {
+					cursoEliminado.liberarVacante();
+					JOptionPane.showMessageDialog(null, "Vacante liberada para: " + cursoEliminado.getName()
+						+ "\nVacantes restantes: " + cursoEliminado.getVacantesDisponibles());
+				}
+
+				// eliminar la fila de la interfaz de usuario
 				if (tbSelCourses.isEditing()) {
 					tbSelCourses.getCellEditor().stopCellEditing();
 				}
@@ -148,9 +171,9 @@ public class Principal extends javax.swing.JFrame {
 				Curso cursoSeleccionado = buscarCursoExacto(nombre, profesor, horario, horas, creditos);
 
 				if (cursoSeleccionado != null) {
-					frmHorario n = new frmHorario(cursoSeleccionado, tbSelCourses);
+					frmConfirm n = new frmConfirm(cursoSeleccionado, tbSelCourses);
 					n.setVisible(true);
-					n.setDefaultCloseOperation(frmHorario.DISPOSE_ON_CLOSE);
+					n.setDefaultCloseOperation(frmConfirm.DISPOSE_ON_CLOSE);
 				} else {
 					JOptionPane.showMessageDialog(null, "Error: Curso no encontrado en la lista global.");
 				}
@@ -159,7 +182,6 @@ public class Principal extends javax.swing.JFrame {
 
 		//tbCourses.getColumnModel().getColumn(3).setCellRenderer(new buttonToTable2());
 		//tbCourses.getColumnModel().getColumn(3).setCellEditor(new TableActionCellEditor2(event2));
-
 		tbSelCourses.getColumnModel().getColumn(5).setCellRenderer(new buttonToTable());
 		tbSelCourses.getColumnModel().getColumn(5).setCellEditor(new TableActionCellEditor(event));
 	}

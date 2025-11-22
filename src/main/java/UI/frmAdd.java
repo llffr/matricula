@@ -110,15 +110,13 @@ public class frmAdd extends JFrame {
 		return menuBar;
 	}
 
-	/**
-	 * MÉTODO CORREGIDO/COMPLETO: Crea el panel de inicio.
-	 */
+	// panel de inicio.
 	private JPanel crearPanelInicio() {
 		JPanel panel = new JPanel(new BorderLayout());
 		return panel;
 	}
 
-	// --- FORMULARIOS ESPECÍFICOS ---
+	// forms
 	private JPanel crearPanelDocente() {
 		JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
 		panel.setBorder(BorderFactory.createTitledBorder("Registro de Docente"));
@@ -200,14 +198,21 @@ public class frmAdd extends JFrame {
 	}
 
 	private JPanel crearPanelCurso() {
-		JPanel panel = new JPanel(new GridLayout(6, 2, 10, 10));
+		JPanel panel = new JPanel(new GridLayout(9, 2, 10, 10));
 		panel.setBorder(BorderFactory.createTitledBorder("Registro de Curso"));
+
+		// horario clases
+		String[] diasSemana= { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" };
+
+		JComboBox<String> cmbDiaInicio = new JComboBox<>(diasSemana);
+		JComboBox<String> cmbDiaFin = new JComboBox<>(diasSemana);
 
 		JTextField txtName = new JTextField(20);
 		JTextField txtHours = new JTextField(20);
 		JTextField txtCredits = new JTextField(20);
 		JTextField txtProfesor = new JTextField(20);
-		JTextField txtHorario = new JTextField(20);
+		// JTextField txtHorario = new JTextField(20);
+		JTextField txtMaxVacantes = new JTextField(20);
 
 		panel.add(new JLabel("Nombre:"));
 		panel.add(txtName);
@@ -217,18 +222,18 @@ public class frmAdd extends JFrame {
 		panel.add(txtCredits);
 		panel.add(new JLabel("Profesor:"));
 		panel.add(txtProfesor);
-		panel.add(new JLabel("Horario:"));
-		panel.add(txtHorario);
 
-		String[] dias= {
-			"lunes-martes",
-			"martes-miercoles",
-			"miercoles-jueves",
-			"jueves-viernes",
-			"viernes-sabado",
-			"sabado-domingo",
-			"domingo-lunes"
-		};
+		panel.add(new JLabel("Día de Inicio:"));
+		panel.add(cmbDiaInicio);
+		panel.add(new JLabel("Día de Fin:"));
+		panel.add(cmbDiaFin);
+		// 
+		JTextField txtHora = new JTextField(20);
+		panel.add(new JLabel("Hora (ej: 9:00 - 11:00):"));
+		panel.add(txtHora);
+		
+		panel.add(new JLabel("Max. Vacantes (int):"));
+		panel.add(txtMaxVacantes);
 
 		JButton btnGuardar = new JButton("Guardar Curso");
 		btnGuardar.addActionListener(e -> {
@@ -237,35 +242,30 @@ public class frmAdd extends JFrame {
 				int hours = Integer.parseInt(txtHours.getText());
 				int credits = Integer.parseInt(txtCredits.getText());
 				String profesor = txtProfesor.getText();
-				String horario = txtHorario.getText();
+				int maxVacantes = Integer.parseInt(txtMaxVacantes.getText());
 
-				if (name.isEmpty() || profesor.isEmpty() || horario.isEmpty()) {
+				// construcción del horario a partir de los combobox y el campo de texto de hora
+				String diaInicio = (String) cmbDiaInicio.getSelectedItem();
+				String diaFin = (String) cmbDiaFin.getSelectedItem();
+				String hora = txtHora.getText();
+
+				// Creación del string Horario: "Lunes-Martes 9:00 - 11:00"
+				String horarioFinal = diaInicio + "-" + diaFin + " " + hora;
+
+				if (name.isEmpty() || profesor.isEmpty() || hora.isEmpty()) {
 					JOptionPane.showMessageDialog(this, "Los campos de texto son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 
-				// dias que se dicta para curso
-				boolean contienePar = false;
-				String horarioLower = horario.toLowerCase();
-
-				for (String par : dias) {
-					if (horarioLower.contains(par)) {
-						contienePar = true;
-						break;
-					}
-				}
-
-				if (!contienePar) {
-					JOptionPane.showMessageDialog(this,
-							"Debes escribir un horario válido (ej: lunes-martes 9-10:30).",
-							"Error",
-							JOptionPane.ERROR_MESSAGE);
+				// CHECK
+				if (diaInicio.equals(diaFin)) {
+					JOptionPane.showMessageDialog(this, "El curso debe tener al menos dos días diferentes.", "Error de Horario", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				//******
 
-				Curso nuevoCurso = new Curso(name, hours, credits, profesor, horario);
-				// USO DE LISTADOBLE
+				Curso nuevoCurso = new Curso(name, hours, credits, profesor, horarioFinal, maxVacantes);
+
+				// uso de listadoble
 				cursos.agregarAlFinal(nuevoCurso);
 
 				JOptionPane.showMessageDialog(this, "Curso registrado: " + nuevoCurso.getName());
@@ -274,10 +274,15 @@ public class frmAdd extends JFrame {
 				txtHours.setText("");
 				txtCredits.setText("");
 				txtProfesor.setText("");
-				txtHorario.setText("");
+				txtHora.setText("");
+				txtMaxVacantes.setText("");
+
+				// los combobox regresan al primer elemento por defecto
+				cmbDiaInicio.setSelectedIndex(0); 
+				cmbDiaFin.setSelectedIndex(0);
 
 			} catch (NumberFormatException ex) {
-				JOptionPane.showMessageDialog(this, "Las Horas y Créditos deben ser números enteros válidos.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Las Horas, Créditos y Vacantes deben ser números enteros válidos.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
 			}
 		});
 

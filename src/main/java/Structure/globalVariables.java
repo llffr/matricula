@@ -37,15 +37,15 @@ public class globalVariables {
 		listaDocentes.agregarAlFinal(new Docente("Maria Lopez","123"));
 		listaDocentes.agregarAlFinal(new Docente("Juan Perez", "456"));
 
-		for(int i=1; i<=1000; i++) {
+		for(int i=1; i<=100000; i++) {
 			String al= "U" + i;
 			String al_pwd= Integer.toString(i);
 			listaAlumnos.agregarAlFinal(new Alumno(al, al_pwd));
 		}
 
-		listaCursos.agregarAlFinal(new Curso("Algoritmos", 4, 6, "Maria Lopez", "Lunes-Miercoles 8:30-10:00"));
-		listaCursos.agregarAlFinal(new Curso("Math1", 4, 6, "Juan Perez", "Lunes-Miercoles 10-13:00"));
-		listaCursos.agregarAlFinal(new Curso("Fisica1", 4, 6, "Juan Perez", "Martes-Jueves 18-20:30"));
+		listaCursos.agregarAlFinal(new Curso("Algoritmos", 4, 6, "Maria Lopez", "Lunes-Miercoles 8:30-10:00", 30));
+		listaCursos.agregarAlFinal(new Curso("Math1", 4, 6, "Juan Perez", "Lunes-Miercoles 10-13:00", 10));
+		listaCursos.agregarAlFinal(new Curso("Fisica1", 4, 6, "Juan Perez", "Martes-Jueves 18-20:30", 3));
 
 		// no duplicate
 		datosInicializados= true;

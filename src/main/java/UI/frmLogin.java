@@ -136,7 +136,7 @@ public class frmLogin extends javax.swing.JFrame {
 					n.setVisible(true);
 					this.dispose();
 					break;
-				} else if (user.equals("root")) {
+				} else if (user.equals("r")) {
 					frmAdd n = new frmAdd();
 					n.setVisible(true);
 					this.dispose();
