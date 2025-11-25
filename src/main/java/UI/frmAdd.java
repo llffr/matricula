@@ -202,7 +202,7 @@ public class frmAdd extends JFrame {
 		panel.setBorder(BorderFactory.createTitledBorder("Registro de Curso"));
 
 		// horario clases
-		String[] diasSemana= { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" };
+		String[] diasSemana= { "--", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" };
 
 		JComboBox<String> cmbDiaInicio = new JComboBox<>(diasSemana);
 		JComboBox<String> cmbDiaFin = new JComboBox<>(diasSemana);
@@ -261,6 +261,12 @@ public class frmAdd extends JFrame {
 				if (diaInicio.equals(diaFin)) {
 					JOptionPane.showMessageDialog(this, "El curso debe tener al menos dos días diferentes.", "Error de Horario", JOptionPane.ERROR_MESSAGE);
 					return;
+				}
+
+				// unico dia
+				if (diaFin.equals("--")) {
+					System.out.println(diaInicio +" " + hora);
+					horarioFinal = diaInicio +  " " + hora;
 				}
 
 				Curso nuevoCurso = new Curso(name, hours, credits, profesor, horarioFinal, maxVacantes);

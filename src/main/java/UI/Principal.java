@@ -350,7 +350,7 @@ public class Principal extends javax.swing.JFrame {
 
 		       tb.append("<img src='file:./img/utp.jpg' alt='Logo' style='width:100px;height:auto;'/>");
 		       tb.append("<h2 style='text-align:center;'>Cursos Matriculados</h2>");
-		       tb.append("<h3 style='text-align:left;'>User: ").append(frmLogin.txtUsuario.getText()).append("</23>");
+		       tb.append("<h3 style='text-align:left;'>User: ").append(frmLogin.txtUsuario.getText()).append("<br /></h3>");
 		       tb.append("<table>");
 		       tb.append("<tr>");
 
@@ -374,7 +374,8 @@ public class Principal extends javax.swing.JFrame {
 
 		       try {
 			       //genera archivo pdf
-			       HtmlConverter.convertToPdf(tb.toString(), new FileOutputStream("o.pdf"));
+			       String user = frmLogin.txtUsuario.getText();
+			       HtmlConverter.convertToPdf(tb.toString(), new FileOutputStream(user + ".pdf"));
 			       JOptionPane.showMessageDialog(null, "Reporte Generado");
 		       } catch (FileNotFoundException ex) {
 			       System.getLogger(Principal.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
