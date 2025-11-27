@@ -1,13 +1,9 @@
 gestion de matricula
 
-corregir / agregar:
-- combobox para seleccionar dias de curso: frmAdd
-- limite de alumnos para matricularse en un curso
-
 * Modelo:
     - Curso
         - String: name, profesor, horario
-        - int: hours, credits
+        - int: hours, credits, maxVacantes, vacantesDisponibles
         - constructor, getters, setters
     - Alumno
         - String: CODIGO, PASSWD
@@ -26,12 +22,12 @@ corregir / agregar:
         - genericNode<T>: cabeza, cola
         - metodos: insertarAlInicio, buscarStudent, eliminar*, toArray, obtenerDatosComoString
         - globalVariables: inicia variables estaticas (para no instanciarlas nuevaamente)
-        
+    - globalVariables: declarar/añadir datos
 * UI:
     - frmLogin: se globalVariables para añadir algunos datos a las listas
-        - frmHorario: seleccionar horario | confirma matricula
-    - Principal: seleccionar cursos a matricular
-    - frmAdd: añadir nuevos Cursos, Docente, Alumno a las listas
+        - frmAdd: añadir nuevos Cursos, Docente, Alumno a las listas
+        - Principal: seleccionar cursos a matricular
+            - frmConfirm: confirmar matricula
 
    ![login](./img/login.png)
    ![menu](./img/menu.png)

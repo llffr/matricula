@@ -104,7 +104,13 @@ public class Principal extends javax.swing.JFrame {
 				Curso cursoSeleccionado = buscarCursoExacto(nombre, profesor, horario, horas, creditos);
 
 				if (cursoSeleccionado != null) {
-					frmConfirm n = new frmConfirm(cursoSeleccionado, tbSelCourses);
+					Runnable onMatriculaSuccess = () -> {
+						DefaultTableModel modelTbcourses = (DefaultTableModel) tbCourses.getModel();
+						// Ejecuta la remoción de la fila 'row' en la tabla de disponibles
+						modelTbcourses.removeRow(row); 
+					};
+
+					frmConfirm n = new frmConfirm(cursoSeleccionado, tbSelCourses, onMatriculaSuccess);
 					n.setVisible(true);
 					n.setDefaultCloseOperation(frmConfirm.DISPOSE_ON_CLOSE);
 				} else {
@@ -113,6 +119,7 @@ public class Principal extends javax.swing.JFrame {
 			}
 		};
 
+		tbCourses.getColumnModel().getColumn(2).setPreferredWidth(180);
 		tbCourses.getColumnModel().getColumn(6).setCellRenderer(new buttonToTable2());
 		tbCourses.getColumnModel().getColumn(6).setCellEditor(new TableActionCellEditor2(event2));
 	}
@@ -144,8 +151,26 @@ public class Principal extends javax.swing.JFrame {
 				// liberar la vacante en el objeto de la lista global
 				if (cursoEliminado != null) {
 					cursoEliminado.liberarVacante();
+
+					// Obtenemos el modelo de la tabla de cursos disponibles
+					DefaultTableModel modelDisponible = (DefaultTableModel) tbCourses.getModel();
+
+					String vacantesStr = cursoEliminado.getVacantesDisponibles() + "/" + cursoEliminado.getMaxVacantes();
+
+					Object[] rowdata = new Object[]{
+						cursoEliminado.getName(),
+							cursoEliminado.getProfesor(),
+							cursoEliminado.getHorario(),
+							cursoEliminado.getHours(),
+							cursoEliminado.getCredits(),
+							vacantesStr, // Vacantes actualizadas
+							"seleccionar" // Botón de acción
+					};
+
+					// Insertamos la fila en la tabla tbcourses (al final, o donde sea más conveniente)
+					modelDisponible.addRow(rowdata);
 					JOptionPane.showMessageDialog(null, "Vacante liberada para: " + cursoEliminado.getName()
-						+ "\nVacantes restantes: " + cursoEliminado.getVacantesDisponibles());
+							+ "\nVacantes restantes: " + cursoEliminado.getVacantesDisponibles());
 				}
 
 				// eliminar la fila de la interfaz de usuario
@@ -157,31 +182,7 @@ public class Principal extends javax.swing.JFrame {
 			}
 		};
 
-		TableActionEvent2 event2 = new TableActionEvent2() {
-			@Override
-			public void openUI(int row) {
-				// obtener los datos de la fila seleccionada
-				String nombre = (String) tbCourses.getValueAt(row, 0);
-				String profesor = (String) tbCourses.getValueAt(row, 1);
-				String horario = (String) tbCourses.getValueAt(row, 2);
-				int horas = (int) tbCourses.getValueAt(row, 3);
-				int creditos = (int) tbCourses.getValueAt(row, 4);
-
-				// buscar el objeto exacto usando sus atributos
-				Curso cursoSeleccionado = buscarCursoExacto(nombre, profesor, horario, horas, creditos);
-
-				if (cursoSeleccionado != null) {
-					frmConfirm n = new frmConfirm(cursoSeleccionado, tbSelCourses);
-					n.setVisible(true);
-					n.setDefaultCloseOperation(frmConfirm.DISPOSE_ON_CLOSE);
-				} else {
-					JOptionPane.showMessageDialog(null, "Error: Curso no encontrado en la lista global.");
-				}
-			}
-		};
-
-		//tbCourses.getColumnModel().getColumn(3).setCellRenderer(new buttonToTable2());
-		//tbCourses.getColumnModel().getColumn(3).setCellEditor(new TableActionCellEditor2(event2));
+		tbSelCourses.getColumnModel().getColumn(4).setPreferredWidth(180);
 		tbSelCourses.getColumnModel().getColumn(5).setCellRenderer(new buttonToTable());
 		tbSelCourses.getColumnModel().getColumn(5).setCellEditor(new TableActionCellEditor(event));
 	}
@@ -210,130 +211,132 @@ public class Principal extends javax.swing.JFrame {
 	// <editor-fold defaultstate="collapsed" desc="Generated
 	// <editor-fold defaultstate="collapsed" desc="Generated
 	// <editor-fold defaultstate="collapsed" desc="Generated
-	       // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-	       private void initComponents() {
+        // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+        private void initComponents() {
 
-	               jMenuItem3 = new javax.swing.JMenuItem();
-	               jMenuItem5 = new javax.swing.JMenuItem();
-	               jDesktopPane1 = new javax.swing.JDesktopPane();
-	               jScrollPane1 = new javax.swing.JScrollPane();
-	               tbCourses = new javax.swing.JTable();
-	               jScrollPane2 = new javax.swing.JScrollPane();
-	               tbSelCourses = new javax.swing.JTable();
-	               jLabel1 = new javax.swing.JLabel();
-	               jLabel2 = new javax.swing.JLabel();
-	               jButton1 = new javax.swing.JButton();
-	               txtUser = new javax.swing.JLabel();
-	               jMenuBar1 = new javax.swing.JMenuBar();
-	               menuAsistencia = new javax.swing.JMenu();
+                jMenuItem3 = new javax.swing.JMenuItem();
+                jMenuItem5 = new javax.swing.JMenuItem();
+                jDesktopPane1 = new javax.swing.JDesktopPane();
+                jScrollPane1 = new javax.swing.JScrollPane();
+                tbCourses = new javax.swing.JTable();
+                jScrollPane2 = new javax.swing.JScrollPane();
+                tbSelCourses = new javax.swing.JTable();
+                jLabel1 = new javax.swing.JLabel();
+                jLabel2 = new javax.swing.JLabel();
+                jButton1 = new javax.swing.JButton();
+                txtUser = new javax.swing.JLabel();
+                jMenuBar1 = new javax.swing.JMenuBar();
+                menuAsistencia = new javax.swing.JMenu();
 
-	               jMenuItem3.setText("jMenuItem3");
+                jMenuItem3.setText("jMenuItem3");
 
-	               jMenuItem5.setText("jMenuItem5");
+                jMenuItem5.setText("jMenuItem5");
 
-	               setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+                setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-	               tbCourses.setModel(new javax.swing.table.DefaultTableModel(
-	                       new Object [][] {
+                tbCourses.setModel(new javax.swing.table.DefaultTableModel(
+                        new Object [][] {
 
-	                       },
-	                       new String [] {
+                        },
+                        new String [] {
 
-	                       }
-	               ));
-	               tbCourses.setRowHeight(30);
-	               jScrollPane1.setViewportView(tbCourses);
+                        }
+                ));
+                tbCourses.setRowHeight(30);
+                jScrollPane1.setViewportView(tbCourses);
 
-	               tbSelCourses.setModel(new javax.swing.table.DefaultTableModel(
-	                       new Object [][] {
+                tbSelCourses.setModel(new javax.swing.table.DefaultTableModel(
+                        new Object [][] {
 
-	                       },
-	                       new String [] {
+                        },
+                        new String [] {
 
-	                       }
-	               ));
-	               tbSelCourses.setRowHeight(30);
-	               jScrollPane2.setViewportView(tbSelCourses);
+                        }
+                ));
+                tbSelCourses.setRowHeight(30);
+                jScrollPane2.setViewportView(tbSelCourses);
 
-	               jLabel1.setText("Cursos disponibles");
+                jLabel1.setText("Cursos disponibles");
 
-	               jLabel2.setText("Cursos matriculados");
+                jLabel2.setText("Cursos matriculados");
 
-	               jButton1.setText("reporte");
-	               jButton1.addActionListener(new java.awt.event.ActionListener() {
-	                       public void actionPerformed(java.awt.event.ActionEvent evt) {
-	                               jButton1ActionPerformed(evt);
-	                       }
-	               });
+                jButton1.setText("reporte");
+                jButton1.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jButton1ActionPerformed(evt);
+                        }
+                });
 
-	               jDesktopPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-	               jDesktopPane1.setLayer(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
-	               jDesktopPane1.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-	               jDesktopPane1.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
-	               jDesktopPane1.setLayer(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-	               jDesktopPane1.setLayer(txtUser, javax.swing.JLayeredPane.DEFAULT_LAYER);
+                jDesktopPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+                jDesktopPane1.setLayer(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+                jDesktopPane1.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+                jDesktopPane1.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+                jDesktopPane1.setLayer(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+                jDesktopPane1.setLayer(txtUser, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-	               javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
-	               jDesktopPane1.setLayout(jDesktopPane1Layout);
-	               jDesktopPane1Layout.setHorizontalGroup(
-	                       jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-	                       .addGroup(jDesktopPane1Layout.createSequentialGroup()
-	                               .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-	                                       .addGroup(jDesktopPane1Layout.createSequentialGroup()
-	                                               .addGap(51, 51, 51)
-	                                               .addComponent(jButton1))
-	                                       .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-	                                               .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jDesktopPane1Layout.createSequentialGroup()
-	                                                       .addGap(34, 34, 34)
-	                                                       .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-	                                                               .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-	                                                               .addGroup(jDesktopPane1Layout.createSequentialGroup()
-	                                                                       .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-	                                                                       .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-	                                                                       .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))))
-	                                               .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jDesktopPane1Layout.createSequentialGroup()
-	                                                       .addGap(15, 15, 15)
-	                                                       .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-	                                                               .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 766, Short.MAX_VALUE)
-	                                                               .addComponent(jScrollPane2)))))
-	                               .addContainerGap(17, Short.MAX_VALUE))
-	               );
-	               jDesktopPane1Layout.setVerticalGroup(
-	                       jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-	                       .addGroup(jDesktopPane1Layout.createSequentialGroup()
-	                               .addContainerGap()
-	                               .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-	                                       .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-	                                       .addComponent(txtUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-	                               .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-	                               .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-	                               .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-	                               .addComponent(jLabel2)
-	                               .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-	                               .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-	                               .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-	                               .addComponent(jButton1)
-	                               .addGap(10, 10, 10))
-	               );
+                javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
+                jDesktopPane1.setLayout(jDesktopPane1Layout);
+                jDesktopPane1Layout.setHorizontalGroup(
+                        jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                                .addGap(51, 51, 51)
+                                                .addComponent(jButton1))
+                                        .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                                .addGap(34, 34, 34)
+                                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 830, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 830, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(20, Short.MAX_VALUE))
+                );
+                jDesktopPane1Layout.setVerticalGroup(
+                        jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton1)
+                                .addGap(10, 10, 10))
+                );
 
-	               menuAsistencia.setText("Cursos");
-	               jMenuBar1.add(menuAsistencia);
+                menuAsistencia.setText("Cursos");
+                jMenuBar1.add(menuAsistencia);
 
-	               setJMenuBar(jMenuBar1);
+                setJMenuBar(jMenuBar1);
 
-	               javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-	               getContentPane().setLayout(layout);
-	               layout.setHorizontalGroup(
-	                       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-	                       .addComponent(jDesktopPane1)
-	               );
-	               layout.setVerticalGroup(
-	                       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-	                       .addComponent(jDesktopPane1)
-	               );
+                javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+                getContentPane().setLayout(layout);
+                layout.setHorizontalGroup(
+                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jDesktopPane1)
+                );
+                layout.setVerticalGroup(
+                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                );
 
-	               pack();
-	       }// </editor-fold>//GEN-END:initComponents
+                pack();
+        }// </editor-fold>//GEN-END:initComponents
 
 	// create pdf
 	       private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -403,19 +406,19 @@ public class Principal extends javax.swing.JFrame {
 		});
 	}
 
-	       // Variables declaration - do not modify//GEN-BEGIN:variables
-	       private javax.swing.JButton jButton1;
-	       private javax.swing.JDesktopPane jDesktopPane1;
-	       private javax.swing.JLabel jLabel1;
-	       private javax.swing.JLabel jLabel2;
-	       private javax.swing.JMenuBar jMenuBar1;
-	       private javax.swing.JMenuItem jMenuItem3;
-	       private javax.swing.JMenuItem jMenuItem5;
-	       private javax.swing.JScrollPane jScrollPane1;
-	       private javax.swing.JScrollPane jScrollPane2;
-	       private javax.swing.JMenu menuAsistencia;
-	       public static javax.swing.JTable tbCourses;
-	       public static javax.swing.JTable tbSelCourses;
-	       private javax.swing.JLabel txtUser;
-	       // End of variables declaration//GEN-END:variables
+        // Variables declaration - do not modify//GEN-BEGIN:variables
+        private javax.swing.JButton jButton1;
+        private javax.swing.JDesktopPane jDesktopPane1;
+        private javax.swing.JLabel jLabel1;
+        private javax.swing.JLabel jLabel2;
+        private javax.swing.JMenuBar jMenuBar1;
+        private javax.swing.JMenuItem jMenuItem3;
+        private javax.swing.JMenuItem jMenuItem5;
+        private javax.swing.JScrollPane jScrollPane1;
+        private javax.swing.JScrollPane jScrollPane2;
+        private javax.swing.JMenu menuAsistencia;
+        public static javax.swing.JTable tbCourses;
+        public static javax.swing.JTable tbSelCourses;
+        private javax.swing.JLabel txtUser;
+        // End of variables declaration//GEN-END:variables
 }

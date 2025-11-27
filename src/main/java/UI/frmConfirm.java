@@ -13,10 +13,13 @@ public class frmConfirm extends javax.swing.JFrame {
 
 	private Curso cursoAConfirmar;
 	private JTable tablaDestino;
+	// atributo para la acción a ejecutar al tener éxito
+	private Runnable onMatriculaSuccess; 
 
-	public frmConfirm(Curso curso, JTable tabla) {
+	public frmConfirm(Curso curso, JTable tabla, Runnable onMatriculaSuccess) {
 		this.cursoAConfirmar = curso;
 		this.tablaDestino = tabla;
+		this.onMatriculaSuccess= onMatriculaSuccess;
 
 		initComponents();
 		setLocationRelativeTo(null);
@@ -226,9 +229,12 @@ public class frmConfirm extends javax.swing.JFrame {
 		if (cursoAConfirmar.matricularAlumno()) {
 			// La matrícula fue exitosa y la vacante se redujo en el objeto Curso
 			agregarCursoAMatricula();
-			JOptionPane.showMessageDialog(this, "Curso '" + cursoAConfirmar.getName() + 
-					"' matriculado con éxito.\nVacantes restantes: " + cursoAConfirmar.getVacantesDisponibles(), 
-					"Matrícula Exitosa", JOptionPane.INFORMATION_MESSAGE);
+
+			// ejecuta el callback para remover la fila de tbcourses
+			if (onMatriculaSuccess != null) {
+				onMatriculaSuccess.run();
+			}
+
 			this.dispose(); 
 		} else {
 			// No hay vacantes
@@ -237,6 +243,7 @@ public class frmConfirm extends javax.swing.JFrame {
 					"Matrícula Fallida", JOptionPane.ERROR_MESSAGE);
 		}
 	}
+
 
 	private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {
 		this.dispose(); // Simplemente cerrar la ventana

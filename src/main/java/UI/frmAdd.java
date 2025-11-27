@@ -229,7 +229,7 @@ public class frmAdd extends JFrame {
 		panel.add(cmbDiaFin);
 		// 
 		JTextField txtHora = new JTextField(20);
-		panel.add(new JLabel("Hora (ej: 9:00 - 11:00):"));
+		panel.add(new JLabel("Hora (ej: 9:00 - 14:00):"));
 		panel.add(txtHora);
 		
 		panel.add(new JLabel("Max. Vacantes (int):"));
