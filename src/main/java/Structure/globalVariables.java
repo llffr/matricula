@@ -31,7 +31,6 @@ public class globalVariables {
 
 	public static void initVariables() {
 		if (datosInicializados) {
-			System.out.println("datos ya creados");
 			return;
 		}
 		listaDocentes.agregarAlFinal(new Docente("Maria Lopez","123"));
