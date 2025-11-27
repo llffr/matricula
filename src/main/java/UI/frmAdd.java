@@ -8,6 +8,7 @@ import Modelo.Docente;
 import Modelo.Alumno;
 import Modelo.Curso;
 import Structure.genericListaDoble;
+import Structure.genericNode;
 import Structure.globalVariables;
 
 import javax.swing.*;
@@ -25,9 +26,8 @@ public class frmAdd extends JFrame {
 	public frmAdd() {
 		super("Gestión de Datos Universitarios (Lista Doble)");
 
-		// Configuración de la ventana principal
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(600, 450); // Aumentado ligeramente el tamaño
+		setSize(700, 550); 
 
 		cardLayout = new CardLayout();
 		mainPanel = new JPanel(cardLayout);
@@ -198,20 +198,45 @@ public class frmAdd extends JFrame {
 	}
 
 	private JPanel crearPanelCurso() {
-		JPanel panel = new JPanel(new GridLayout(9, 2, 10, 10));
+		JPanel panel = new JPanel(new GridLayout(10, 2, 10, 10));
 		panel.setBorder(BorderFactory.createTitledBorder("Registro de Curso"));
 
 		// horario clases
 		String[] diasSemana= { "--", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" };
 
+		// horarios +30min
+		String[] horasDisponibles = new String[29];
+		int count = 0;
+		for (int h = 8; h <= 22; h++) {
+			horasDisponibles[count++] = String.format("%02d:00", h);
+			if (h < 22) { // No queremos 20:30
+				horasDisponibles[count++] = String.format("%02d:30", h);
+			}
+		}
+		// docentes registrados
+		String[] nombresDocentes;
+		if (docentes.getTamaño()> 0) {
+			nombresDocentes = new String[docentes.getTamaño()]; 
+
+			genericNode<Docente> actual = docentes.getCabeza();
+			int i = 0;
+			while (actual != null) {
+				nombresDocentes[i++] = actual.getDato().getNombre();
+				actual = actual.getSiguiente();
+			}
+		} else {
+			nombresDocentes = new String[]{"-- No hay docentes registrados --"};
+		}
+
 		JComboBox<String> cmbDiaInicio = new JComboBox<>(diasSemana);
 		JComboBox<String> cmbDiaFin = new JComboBox<>(diasSemana);
+		JComboBox<String> cmbHoraInicio = new JComboBox<>(horasDisponibles);
+		JComboBox<String> cmbHoraFin = new JComboBox<>(horasDisponibles);
+		JComboBox<String> cmbProfesor = new JComboBox<>(nombresDocentes);
 
 		JTextField txtName = new JTextField(20);
 		JTextField txtHours = new JTextField(20);
 		JTextField txtCredits = new JTextField(20);
-		JTextField txtProfesor = new JTextField(20);
-		// JTextField txtHorario = new JTextField(20);
 		JTextField txtMaxVacantes = new JTextField(20);
 
 		panel.add(new JLabel("Nombre:"));
@@ -220,17 +245,18 @@ public class frmAdd extends JFrame {
 		panel.add(txtHours);
 		panel.add(new JLabel("Créditos (int):"));
 		panel.add(txtCredits);
-		panel.add(new JLabel("Profesor:"));
-		panel.add(txtProfesor);
 
+		panel.add(new JLabel("Profesor:"));
+		panel.add(cmbProfesor);
 		panel.add(new JLabel("Día de Inicio:"));
 		panel.add(cmbDiaInicio);
 		panel.add(new JLabel("Día de Fin:"));
 		panel.add(cmbDiaFin);
-		// 
-		JTextField txtHora = new JTextField(20);
-		panel.add(new JLabel("Hora (ej: 9:00 - 14:00):"));
-		panel.add(txtHora);
+
+		panel.add(new JLabel("Hora de Inicio:"));
+		panel.add(cmbHoraInicio);
+		panel.add(new JLabel("Hora de Fin:"));
+		panel.add(cmbHoraFin);
 		
 		panel.add(new JLabel("Max. Vacantes (int):"));
 		panel.add(txtMaxVacantes);
@@ -241,18 +267,24 @@ public class frmAdd extends JFrame {
 				String name = txtName.getText();
 				int hours = Integer.parseInt(txtHours.getText());
 				int credits = Integer.parseInt(txtCredits.getText());
-				String profesor = txtProfesor.getText();
 				int maxVacantes = Integer.parseInt(txtMaxVacantes.getText());
 
-				// construcción del horario a partir de los combobox y el campo de texto de hora
+				String profesor = (String) cmbProfesor.getSelectedItem();
+				if (profesor.equals("-- No hay docentes registrados --")) {
+					JOptionPane.showMessageDialog(this, "ERROR: Debe registrar docentes antes de crear un curso.", "Error de Datos", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				// horario combobox
 				String diaInicio = (String) cmbDiaInicio.getSelectedItem();
 				String diaFin = (String) cmbDiaFin.getSelectedItem();
-				String hora = txtHora.getText();
+				String horaInicio = (String) cmbHoraInicio.getSelectedItem();
+				String horaFin = (String) cmbHoraFin.getSelectedItem();
 
 				// Creación del string Horario: "Lunes-Martes 9:00 - 11:00"
-				String horarioFinal = diaInicio + "-" + diaFin + " " + hora;
+				String horarioFinal = diaInicio + "-" + diaFin + " " + horaInicio + "-" + horaFin;
 
-				if (name.isEmpty() || profesor.isEmpty() || hora.isEmpty()) {
+				if (name.isEmpty()) {
 					JOptionPane.showMessageDialog(this, "Los campos de texto son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
@@ -263,10 +295,15 @@ public class frmAdd extends JFrame {
 					return;
 				}
 
+				// hora inicio no sea igual o posterior a fin
+				if (horaInicio.compareTo(horaFin) >= 0) {
+					JOptionPane.showMessageDialog(this, "La Hora de Inicio debe ser anterior a la Hora de Fin.", "Error de Horario", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
 				// unico dia
 				if (diaFin.equals("--")) {
-					System.out.println(diaInicio +" " + hora);
-					horarioFinal = diaInicio +  " " + hora;
+					horarioFinal = diaInicio +  " " + horaInicio + "-" + horaFin;
 				}
 
 				Curso nuevoCurso = new Curso(name, hours, credits, profesor, horarioFinal, maxVacantes);
@@ -274,18 +311,19 @@ public class frmAdd extends JFrame {
 				// uso de listadoble
 				cursos.agregarAlFinal(nuevoCurso);
 
-				JOptionPane.showMessageDialog(this, "Curso registrado: " + nuevoCurso.getName());
+				JOptionPane.showMessageDialog(this, "Curso registrado: " + nuevoCurso.getName() + " horario: " + horarioFinal);
 
 				txtName.setText("");
 				txtHours.setText("");
 				txtCredits.setText("");
-				txtProfesor.setText("");
-				txtHora.setText("");
 				txtMaxVacantes.setText("");
 
 				// los combobox regresan al primer elemento por defecto
+				cmbProfesor.setSelectedIndex(0);
 				cmbDiaInicio.setSelectedIndex(0); 
 				cmbDiaFin.setSelectedIndex(0);
+				cmbHoraInicio.setSelectedIndex(0);
+				cmbHoraFin.setSelectedIndex(0);
 
 			} catch (NumberFormatException ex) {
 				JOptionPane.showMessageDialog(this, "Las Horas, Créditos y Vacantes deben ser números enteros válidos.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
